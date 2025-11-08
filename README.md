@@ -1,5 +1,10 @@
 # Crossplane Lab: Deploy Azure Environments Like a Boss! 🚀☁️
 
+<div align="center">
+  <img src="image/infra.png" alt="Crossplane Lab Infrastructure Overview" width="600"/>
+  <p><em>Behold the majestic lab infrastructure that Crossplane conjures from thin air! 🌟</em></p>
+</div>
+
 Ever dreamed of spinning up entire cloud labs with a single command, no manual portal-clicking nightmares? What if your infrastructure could self-heal, like a phoenix rising from the ashes of drift? Welcome to the **Crossplane Lab** – where YAML meets wizardry, and Kubernetes bosses around Azure like it's nobody's business! 🧙‍♂️
 
 Picture this: You're a DevOps hero, sipping coffee while Crossplane conjures VMs, networks, and apps in Azure. No scripts, no sweat – just declare your desires, and poof! A full lab environment appears. And if something goes rogue (manual tweak, anyone?), Crossplane auto-fixes it. It's infrastructure as code, but make it epic. 🌟
@@ -34,6 +39,12 @@ Key Features:
 Boom! Your lab is live. Modify and `helm upgrade` for tweaks. Uninstall to clean up – Crossplane handles the Azure teardown.
 
 ## Architecture: How the Sausage is Made 🏗️
+
+<div align="center">
+  <img src="image/architecure.png" alt="Crossplane Architecture Diagram" width="700"/>
+  <p><em>The magical architecture: From YAML to Azure reality! 🔮</em></p>
+</div>
+
 - **XRD (Composite Resource Definition)**: Defines `CompositeVM` – your custom API for VMs.
 - **Composition**: Uses `patch-and-transform` to assemble NICs, VMs, and IPs from specs.
 - **Helm Templating**: Generates multiple instances from `values.yaml`.
@@ -56,6 +67,11 @@ Think of it as a factory: You input specs, compositions process them, providers 
 - **Multi-Cloud Twist**: Swap Azure providers for AWS – same YAML, different clouds.
 - **Monitoring**: Integrate Prometheus for resource metrics. Because who doesn't love dashboards?
 
+<div align="center">
+  <img src="image/infra.png" alt="Advanced Infrastructure Possibilities" width="500"/>
+  <p><em>Unlock endless possibilities – from simple labs to enterprise empires! 🌍</em></p>
+</div>
+
 ## Tutorials & Shoutouts 🙌
 Huge thanks to the Crossplane community tutorials – they made this click for me! And the YouTube channels breaking down Crossplane/Azure integrations? Absolute gold. You know who you are – keep the awesome content coming! 📺🔥 Special shoutout to "The DevOps Toolkit" and "Crossplane's official channel" for the inspo.
 
@@ -72,9 +88,13 @@ Got ideas? Bugs? Enhancements? PRs welcome! Let's make this lab even more epic. 
 MIT License. Use at your own risk – test in non-prod first. Azure costs apply; monitor your bill! 😅
 
 ## FAQ: Burning Questions Answered 🔥
-- **Q: Is this production-ready?** A: For labs and dev environments, yes! For prod, add monitoring and backups.
 - **Q: Can I use it with other clouds?** A: Absolutely – swap providers for AWS/GCP.
 - **Q: What's the cost?** A: Free for Crossplane, but Azure resources add up. Use free tiers for testing.
 - **Q: Stuck?** A: Docs first, then community. We're all learning!
+
+<div align="center">
+  <img src="image/architecure.png" alt="Crossplane Workflow Magic" width="600"/>
+  <p><em>The workflow that turns dreams into deployed infra – pure magic! ✨</em></p>
+</div>
 
 Now go deploy that lab and conquer the cloud! If you build something cool, tag me. Questions? Docs or community got you. Onward! 🚀
