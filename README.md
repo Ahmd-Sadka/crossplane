@@ -76,10 +76,10 @@ Think of it as a factory: You input specs, compositions process them, providers 
 Huge thanks to the Crossplane community tutorials – they made this click for me! And the YouTube channels breaking down Crossplane/Azure integrations? Absolute gold. You know who you are – keep the awesome content coming! 📺🔥 Special shoutout to "The DevOps Toolkit" and "Crossplane's official channel" for the inspo.
 
 ## Links & Resources 🔗
-- **Repo**: [Your GitHub Repo Link Here] – Star it if it blows your mind!
-- **Docs**: Dive deep in `docs/` – what-is-crossplane, compositions, providers, deployment guides.
+- **Repo**: https://github.com/Ahmd-Sadka/crossplane.git – Star it if it blows your mind!
+- **Docs**: Dive deep in `docs/` up – what-is-crossplane, compositions, providers, deployment guides.
 - **Crossplane Docs**: [crossplane.io](https://crossplane.io) – official wisdom.
-- **Community**: Slack for questions, GitHub for issues.
+- **Ubound Marketplace**: https://marketplace.upbound.io/ – explore more providers and functions.
 
 ## Contributing: Join the Fun! 🤝
 Got ideas? Bugs? Enhancements? PRs welcome! Let's make this lab even more epic. Check issues for quests.
