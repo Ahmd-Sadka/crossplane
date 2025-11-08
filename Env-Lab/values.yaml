@@ -1,0 +1,82 @@
+# values.yaml
+envName: crossplane-lab
+location: North Europe
+resourceGroup: Labs
+
+providerConfig: default     # name of ProviderConfig in cluster
+
+# Platform toggles
+platform:
+  createVNet: true
+  vnetName: lab-vnet
+  vnetCidr: 10.10.0.0/16
+
+  subnets:
+    public:
+      create: true
+      name: public
+      cidr: 10.10.1.0/24
+      nsg: public-nsg
+      existingSubnetId: ""        # if using existing subnet ID, set here
+    private:
+      create: true
+      name: private
+      cidr: 10.10.2.0/24
+      nsg: private-nsg
+      existingSubnetId: ""
+    appservice:
+      create: true
+      name: appservice
+      cidr: 10.10.3.0/24
+      nsg: appservice-nsg
+      existingSubnetId: ""
+
+  natGateway:
+    create: true
+    name: myenv-nat
+    publicIpName: myenv-nat-pip
+    existingPublicIpId: ""
+
+  appService:
+    createPlan: true
+    planName: integration-plan
+    sku: P1v2
+    kind: linux
+    linuxFxVersion: "DOTNETCORE|8.0"
+
+# VMs - list mode
+vms:
+  mode: list
+  items:
+    - name: vm1
+      role: admin
+      subnet: lab-vnet-subnet-public          # key must exist under platform.subnets
+      public: true
+      vmSize: Standard_B2s
+      sshKey: ""                             # set to your SSH public key
+      existingNicId: ""       # set to Azure NIC resource id to attach to existing NIC instead of creating one
+    - name: vm2
+      role: developer
+      subnet: lab-vnet-subnet-public
+      public: true
+      vmSize: Standard_B2s
+      sshKey: ""
+      existingNicId: ""
+    - name: master
+      role: db-master
+      subnet: lab-vnet-subnet-private
+      public: false
+      vmSize: Standard_B4ms
+      sshKey: ""
+    - name: slave
+      role: db-slave
+      subnet: lab-vnet-subnet-private
+      public: false
+      vmSize: Standard_B4ms
+      sshKey: ""
+      existingNicId: ""
+
+# labels/tags for resources
+tags:
+  owner: devops
+  env: crossplane-lab

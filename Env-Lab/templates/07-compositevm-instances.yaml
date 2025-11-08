@@ -1,0 +1,19 @@
+{{- range $i, $vm := .Values.vms.items }}
+---
+apiVersion: compute.platform.example.org/v1alpha1
+kind: CompositeVM
+metadata:
+  name: {{ $.Values.envName }}-{{ $vm.name }}
+spec:
+  vnetName: {{ $.Values.platform.vnetName }}
+  vmSize: {{ $vm.vmSize | default "Standard_B2s" }}
+  subnetName: {{ $vm.subnet }}
+  public: {{ $vm.public | default false }}
+  publicIPName: {{ if $vm.public }}{{ $vm.name }}-public-ip{{ else }}{{ "" }}{{ end }} 
+  sshKey: {{ $vm.sshKey | quote }}
+  NICName: {{ $vm.name }}-nic
+  tags:
+{{- range $k, $v := $.Values.tags }}
+    {{ $k }}: "{{ $v }}"
+{{- end }}
+{{- end }}

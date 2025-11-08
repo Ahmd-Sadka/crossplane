@@ -1,0 +1,32 @@
+{{- if .Values.platform.appService.createPlan }}
+apiVersion: web.azure.upbound.io/v1beta1
+kind: AppServicePlan
+metadata:
+  name: {{ .Values.platform.appService.planName }}
+spec:
+  forProvider:
+    resourceGroupName: {{ .Values.resourceGroup }}
+    location: {{ .Values.location }}
+    sku:
+      name: {{ .Values.platform.appService.sku }}
+      tier: PremiumV2
+    kind: {{ .Values.platform.appService.kind }}
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
+
+apiVersion: web.azure.upbound.io/v1beta1
+kind: LinuxWebApp
+metadata:
+  name: integration-app
+spec:
+  forProvider:
+    resourceGroupName: {{ .Values.resourceGroup }}
+    location: {{ .Values.location }}
+    serverFarmId: {{ .Values.platform.appService.planName }}
+    siteConfig:
+      linuxFxVersion: "{{ .Values.platform.appService.linuxFxVersion }}"
+      alwaysOn: true
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
+---
+{{- end }}

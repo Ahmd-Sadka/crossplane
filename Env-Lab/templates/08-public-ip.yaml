@@ -1,0 +1,21 @@
+{{- range .Values.vms.items }}
+{{- if .public }}
+---
+apiVersion: network.azure.upbound.io/v1beta1
+kind: PublicIP
+metadata:
+  name: {{ .name }}-public-ip
+spec:
+  forProvider:
+    resourceGroupName: {{ $.Values.resourceGroup }}
+    location: {{ $.Values.location }}
+    allocationMethod: Static
+    sku: Standard
+    tags:
+{{- range $k, $v := $.Values.tags }}
+      {{ $k }}: "{{ $v }}"
+{{- end }}
+  providerConfigRef:
+    name: default
+{{- end }}
+{{- end }}

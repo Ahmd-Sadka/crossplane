@@ -1,0 +1,128 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: composition-compositevm
+spec:
+  compositeTypeRef:
+    apiVersion: compute.platform.example.org/v1alpha1
+    kind: CompositeVM
+  mode: Pipeline
+  pipeline:
+  - step: patch-and-transform
+    functionRef:
+      name: crossplane-contrib-function-patch-and-transform
+    input:
+      apiVersion: pt.fn.crossplane.io/v1beta1
+      kind: Resources
+      resources:
+      - name: nic
+        base:
+          apiVersion: network.azure.upbound.io/v1beta1
+          kind: NetworkInterface
+          metadata:
+            name: {}
+          spec:
+            forProvider:
+              resourceGroupName: {{ .Values.resourceGroup }}
+              location: {{ .Values.location }}
+              tags: {}
+              ipConfiguration:
+                - name: ipconfig1
+                  subnetIdRef:
+                    name: {}
+                  publicIpAddressIdRef:
+                    name: ""
+                    policy:
+                      resolution: Optional
+                      resolve: IfNotPresent
+                  privateIpAddressAllocation: Dynamic
+            providerConfigRef:
+              name: default
+        patches:
+          - fromFieldPath: spec.NICName
+            toFieldPath: metadata.name
+          - fromFieldPath: spec.subnetId
+            toFieldPath: spec.forProvider.ipConfiguration[0].subnetId
+            policy:
+              fromFieldPath: Optional
+          # <-- FIXED: build "lab-vnet-subnet-<subnetName>" with a Format transform
+          - fromFieldPath: spec.subnetName
+            toFieldPath: spec.forProvider.ipConfiguration[0].subnetIdRef.name
+            transforms:
+              - type: string
+                string:
+                  type: Format
+                  fmt: "%s"
+            policy:
+              fromFieldPath: Optional
+
+          # <-- FIXED: set pip name from metadata.name using Format (see note above about conditionals)
+          - fromFieldPath: spec.publicIPName
+            toFieldPath: spec.forProvider.ipConfiguration[0].publicIpAddressIdRef.name
+            policy:
+              fromFieldPath: Optional
+
+          - fromFieldPath: spec.tags
+            toFieldPath: spec.forProvider.tags
+        readinessChecks:
+          - type: MatchString
+            fieldPath: status.atProvider.provisioningState
+            matchString: Succeeded
+
+      - name: linuxvm
+        base:
+          apiVersion: compute.azure.upbound.io/v1beta2
+          kind: LinuxVirtualMachine
+          metadata:
+            name: {}
+          spec:
+            forProvider:
+              resourceGroupName: DevOps-Labs
+              location: North Europe
+              tags: {}
+              size: Standard_B2s
+              adminUsername: azureuser
+              disablePasswordAuthentication: true
+              adminSshKey:
+                - publicKey: {}
+                  username: azureuser
+              sourceImageReference:
+                publisher: Canonical
+                offer: 0001-com-ubuntu-server-jammy
+                sku: "22_04-lts"
+                version: latest
+              networkInterfaceIdsRefs:
+                - name: {}
+              osDisk:
+                caching: ReadWrite
+                storageAccountType: Standard_LRS
+            providerConfigRef:
+              name: default
+        patches:
+          - fromFieldPath: metadata.name
+            toFieldPath: metadata.name
+            transforms:
+              - type: string
+                string:
+                  type: Format
+                  fmt: "%s-vm"
+          - fromFieldPath: spec.location
+            toFieldPath: spec.forProvider.location
+            policy:
+              fromFieldPath: Optional
+          - fromFieldPath: spec.vmSize
+            toFieldPath: spec.forProvider.size
+            policy:
+              fromFieldPath: Optional
+          - fromFieldPath: spec.sshKey
+            toFieldPath: spec.forProvider.adminSshKey[0].publicKey
+            policy:
+              fromFieldPath: Optional
+          - fromFieldPath: spec.NICName
+            toFieldPath: spec.forProvider.networkInterfaceIdsRefs[0].name
+          - fromFieldPath: spec.tags
+            toFieldPath: spec.forProvider.tags
+        readinessChecks:
+          - type: MatchString
+            fieldPath: status.atProvider.provisioningState
+            matchString: Succeeded

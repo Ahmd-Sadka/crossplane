@@ -1,0 +1,14 @@
+{{- if .Values.platform.createVNet }}
+apiVersion: network.azure.upbound.io/v1beta1
+kind: VirtualNetwork
+metadata:
+  name: {{ .Values.platform.vnetName }}
+spec:
+  forProvider:
+    resourceGroupName: {{ .Values.resourceGroup }}
+    location: {{ .Values.location }}
+    addressSpace:
+      - {{ .Values.platform.vnetCidr }}
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
+{{- end }}

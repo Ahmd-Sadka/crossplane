@@ -1,0 +1,29 @@
+{{- if .Values.platform.natGateway.create }}
+apiVersion: network.azure.upbound.io/v1beta1
+kind: PublicIPAddress
+metadata:
+  name: {{ .Values.platform.natGateway.publicIpName }}
+spec:
+  forProvider:
+    resourceGroupName: {{ $.Values.resourceGroup }}
+    publicIPAllocationMethod: Static
+    sku:
+      name: Standard
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
+---
+apiVersion: network.azure.upbound.io/v1beta1
+kind: NatGateway
+metadata:
+  name: {{ .Values.platform.natGateway.name }}
+spec:
+  forProvider:
+    resourceGroupName: {{ .Values.resourceGroup }}
+    sku: Standard
+    publicIPAddresses:
+      - idRef:
+          name: {{ .Values.platform.natGateway.publicIpName }}
+  providerConfigRef:
+    name: {{ .Values.providerConfig }}
+
+{{- end }}

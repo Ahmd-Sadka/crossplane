@@ -1,0 +1,18 @@
+{{- range $key, $s := .Values.platform.subnets }}
+{{- if $s.create }}
+---
+apiVersion: network.azure.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: {{ $.Values.platform.vnetName }}-subnet-{{ $s.name }}
+spec:
+  forProvider:
+    resourceGroupName: {{ $.Values.resourceGroup }}
+    # location: {{ $.Values.location }}
+    virtualNetworkName: {{ $.Values.platform.vnetName }}
+    addressPrefixes:
+      - {{ $s.cidr }}
+  providerConfigRef:
+    name: {{ $.Values.providerConfig }}
+{{- end }}
+{{- end }}

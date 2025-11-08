@@ -1,0 +1,52 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: crossplane-compositevm-permissions
+  labels:
+    rbac.crossplane.io/aggregate-to-crossplane: "true"
+rules:
+- apiGroups:
+  - compute.platform.example.org
+  resources:
+  - compositevms
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+  - deletecollection
+- apiGroups:
+  - network.azure.upbound.io
+  resources:
+  - publicips
+  - publicips/status
+  - networkinterfaces
+  - networkinterfaces/status
+  - subnets
+  - subnets/status
+  - virtualnetworks
+  - virtualnetworks/status
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - compute.azure.upbound.io
+  resources:
+  - linuxvirtualmachines
+  - linuxvirtualmachines/status
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
